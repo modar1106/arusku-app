@@ -41,7 +41,7 @@ function App() {
       {!isAuthPage && (
         <nav className="bg-gray-800 p-4 text-white shadow-md">
           <div className="container mx-auto flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">ArusKu</Link>
+            <Link to="/" className="text-xl font-bold text-white-900 dark:text-white">ArusKu</Link>
             
             {/* Navigasi Desktop */}
             <div className="hidden md:flex items-center space-x-4">

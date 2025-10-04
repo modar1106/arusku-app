@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Style DatePicker hanya berlaku saat Dark Mode aktif */
+.dark .react-datepicker {
+  background-color: #1f2937; /* bg-gray-800 */
+  border-color: #4b5563;  /* border-gray-600 */
+}
+.dark .react-datepicker__header {
+  background-color: #111827; /* bg-gray-900 */
+  border-bottom-color: #4b5563;
+}
+.dark .react-datepicker__current-month,
+.dark .react-datepicker-time__header,
+.dark .react-datepicker-year-header,
+.dark .react-datepicker__day-name,
+.dark .react-datepicker__day {
+  color: #d1d5db; /* text-gray-300 */
+}
+.dark .react-datepicker__day:hover {
+  background-color: #374151; /* bg-gray-700 */
+}
+.dark .react-datepicker__day--selected,
+.dark .react-datepicker__day--keyboard-selected {
+  background-color: #2563eb; /* bg-blue-600 */
+  color: white;
+}
+.dark .react-datepicker__input-container input {
+  background-color: inherit;
+}

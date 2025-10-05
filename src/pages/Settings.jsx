@@ -7,6 +7,7 @@ import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, verify
 import { Tab } from '@headlessui/react';
 import Input from '../components/ui/Input';
 import Modal from '../components/ui/Modal';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -203,8 +204,8 @@ export default function SettingsPage() {
                     <button type="submit" className="w-full sm:w-auto bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">Tambah</button>
                   </form>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"><div className="mt-4">
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-200">Kategori Pengeluaran</h3><ul className="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">{categories.expense.map(cat => (<li key={cat.id} className="flex justify-between items-center">{cat.name}<button onClick={() => handleDeleteCategory(cat.id)} className="text-red-500 text-lg font-bold hover:text-red-700">&times;</button></li>))}</ul></div><div>
-                      <h3 className="font-semibold mt-4 text-gray-800 dark:text-gray-200">Kategori Pemasukan</h3><ul className="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">{categories.income.map(cat => (<li key={cat.id} className="flex justify-between items-center">{cat.name}<button onClick={() => handleDeleteCategory(cat.id)} className="text-red-500 text-lg font-bold hover:text-red-700">&times;</button></li>))}</ul></div></div>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-200">Kategori Pengeluaran</h3><ul className="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">{categories.expense.map(cat => (<li key={cat.id} className="flex justify-between items-center">{cat.name}<button onClick={() => handleDeleteCategory(cat.id)} className="text-red-500 text-lg font-bold hover:text-red-700"><TrashIcon className="h-5 w-5" /></button></li>))}</ul></div><div>
+                      <h3 className="font-semibold mt-4 text-gray-800 dark:text-gray-200">Kategori Pemasukan</h3><ul className="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">{categories.income.map(cat => (<li key={cat.id} className="flex justify-between items-center">{cat.name}<button onClick={() => handleDeleteCategory(cat.id)} className="text-red-500 text-lg font-bold hover:text-red-700"><TrashIcon className="h-5 w-5" /></button></li>))}</ul></div></div>
                 </div>
               </div>
             </Tab.Panel>

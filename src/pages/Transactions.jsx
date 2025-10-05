@@ -6,6 +6,8 @@ import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import EmptyState from '../components/ui/EmptyState';
 
 export default function TransactionsPage() {
   const { currentUser } = useAuth();
@@ -259,14 +261,22 @@ export default function TransactionsPage() {
                     <span className={`font-semibold ${trans.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                       {trans.type === 'income' ? '+' : '-'} Rp {trans.amount.toLocaleString('id-ID')}
                     </span>
-                    <button onClick={() => handleOpenEditModal(trans)} className="text-blue-500 hover:text-blue-700 text-sm">Edit</button>
-                    <button onClick={() => handleDeleteTransaction(trans.id)} className="text-red-500 hover:text-red-700 text-sm">Hapus</button>
+                    <button onClick={() => handleOpenEditModal(trans)} className="text-blue-500 hover:text-blue-700 text-sm">
+                      <PencilIcon className="h-5 w-5" />
+                    </button>
+                    <button onClick={() => handleDeleteTransaction(trans.id)} className="text-red-500 hover:text-red-700 text-sm">
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
                   </div>
                 </li>
               ))}
             </ul>
 
-            {searchedTransactions.length === 0 && <p className="text-center text-gray-500 dark:text-gray-400 py-10">Tidak ada transaksi yang cocok.</p>}
+            {searchedTransactions.length === 0 &&
+              <EmptyState 
+                title="Tidak Ada Transaksi"
+                message="Sepertinya belum ada data yang cocok dengan filter Anda. Coba ubah filter atau tambahkan transaksi baru."
+              />}
             
             {totalPages > 1 && (
               <div className="flex justify-between items-center mt-6">

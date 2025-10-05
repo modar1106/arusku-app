@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebase';
+import { auth, db } from '../services/firebase';
+import { collection, writeBatch, doc } from 'firebase/firestore';
+import { DEFAULT_EXPENSE_CATEGORIES, DEFAULT_INCOME_CATEGORIES } from '../utils/defaultData';
 import Input from '../components/ui/Input';
 import AuthLayout from '../components/auth/AuthLayout';
 import { Link } from 'react-router-dom';
@@ -10,23 +12,54 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError(''); setSuccess('');
+    setError('');
+    setSuccess('');
     if (!email || !password) return setError('Email dan password harus diisi.');
     if (password.length < 6) return setError('Password minimal harus 6 karakter.');
+    
+    setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const batch = writeBatch(db);
+
+      DEFAULT_EXPENSE_CATEGORIES.forEach(categoryName => {
+        const docRef = doc(collection(db, 'categories'));
+        batch.set(docRef, {
+          userId: user.uid,
+          name: categoryName,
+          type: 'expense'
+        });
+      });
+
+      DEFAULT_INCOME_CATEGORIES.forEach(categoryName => {
+        const docRef = doc(collection(db, 'categories'));
+        batch.set(docRef, {
+          userId: user.uid,
+          name: categoryName,
+          type: 'income'
+        });
+      });
+
+      await batch.commit();
+
       setSuccess('Akun berhasil dibuat! Silakan login.');
-      setEmail(''); setPassword('');
+      setEmail('');
+      setPassword('');
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
         setError('Alamat email ini sudah terdaftar.');
       } else {
         setError('Terjadi kesalahan saat mendaftar.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,8 +77,8 @@ export default function RegisterPage() {
         {success && <p className="text-green-500 text-sm text-center py-2">{success}</p>}
 
         <div className="flex gap-4 pt-4">
-          <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Sign Up
+          <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 disabled:bg-blue-300">
+            {loading ? 'Mendaftar...' : 'Sign Up'}
           </button>
           <Link to="/login" className="w-full border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-300 text-md p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-center">
             Login

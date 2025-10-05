@@ -1,5 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
+import EmptyState from '../ui/EmptyState';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1943', '#4CAF50', '#FF5722', '#673AB7'];
 
@@ -8,9 +9,10 @@ export default function DonutChart({ data, totalValue }) {
 
   if (!data || data.length === 0 || data.every(item => item.value === 0)) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
-        Belum ada data untuk ditampilkan.
-      </div>
+      <EmptyState
+        title="Data Belum Cukup"
+        message="Tambahkan transaksi pemasukan atau pengeluaran untuk melihat ringkasan visual di sini."
+      />
     );
   }
 
@@ -37,7 +39,7 @@ export default function DonutChart({ data, totalValue }) {
         <Tooltip
           formatter={(value) => `Rp ${value.toLocaleString('id-ID')}`}
           contentStyle={{
-            backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff', 
+            backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
             borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db',
           }}
           labelStyle={{ color: theme === 'dark' ? '#d1d5db' : '#111827' }}

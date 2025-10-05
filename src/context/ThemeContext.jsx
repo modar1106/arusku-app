@@ -8,28 +8,24 @@ export function useTheme() {
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    // Cek preferensi yang tersimpan di local storage saat pertama kali memuat
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light'; // Default ke 'light' jika tidak ada
+    return savedTheme || 'light';
   });
 
-  // src/context/ThemeContext.jsx
 
   useEffect(() => {
-    const root = window.document.documentElement; // elemen <html>
-    const body = window.document.body;           // elemen <body>
+    const root = window.document.documentElement;
+    const body = window.document.body;
 
-    // Selalu hapus dulu untuk reset
     root.classList.remove('dark');
     
     if (theme === 'dark') {
       console.log('DIAGNOSTIK: Menerapkan tema DARK.');
       root.classList.add('dark');
-      body.style.backgroundColor = '#111827'; // Warna untuk bg-gray-900
+      body.style.backgroundColor = '#111827';
     } else {
       console.log('DIAGNOSTIK: Menerapkan tema LIGHT.');
-      // Class 'dark' sudah dihapus di atas
-      body.style.backgroundColor = '#F9FAFB'; // Warna untuk bg-gray-50
+      body.style.backgroundColor = '#F9FAFB';
     }
     
     localStorage.setItem('theme', theme);

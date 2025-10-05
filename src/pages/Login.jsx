@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'; // <-- 1. Import fungsi baru
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import Input from '../components/ui/Input';
 import AuthLayout from '../components/auth/AuthLayout';
 import { Link } from 'react-router-dom';
-import Modal from '../components/ui/Modal'; // <-- 2. Import komponen Modal
+import Modal from '../components/ui/Modal';
 
 export default function LoginPage() {
-  // State untuk form login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  // --- 3. State baru untuk modal Lupa Password ---
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [modalMessage, setModalMessage] = useState({ type: '', text: '' });
@@ -33,7 +31,7 @@ export default function LoginPage() {
     }
   };
 
-  // --- 4. Fungsi baru untuk handle Lupa Password ---
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setModalMessage({ type: '', text: '' });

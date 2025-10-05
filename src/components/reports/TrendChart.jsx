@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-// Fungsi untuk memformat tanggal (misal: "Oct 2")
 const formatDate = (date) => new Date(date).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' });
 
 export default function TrendChart({ transactions }) {
-  // useMemo digunakan agar data tidak diolah ulang setiap kali render, kecuali jika transaksinya berubah
   const chartData = useMemo(() => {
     if (!transactions || transactions.length === 0) return [];
 
-    // Kelompokkan transaksi berdasarkan hari
     const groupedByDay = transactions.reduce((acc, trans) => {
-      const date = trans.createdAt.toDate().toISOString().split('T')[0]; // Ambil tanggalnya saja (YYYY-MM-DD)
+      const date = trans.createdAt.toDate().toISOString().split('T')[0];
       if (!acc[date]) {
         acc[date] = { income: 0, expense: 0 };
       }
@@ -23,7 +20,6 @@ export default function TrendChart({ transactions }) {
       return acc;
     }, {});
 
-    // Ubah menjadi array dan urutkan berdasarkan tanggal
     return Object.keys(groupedByDay)
       .map(date => ({
         date,

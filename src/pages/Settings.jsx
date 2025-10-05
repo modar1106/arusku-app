@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext'; // Import useTheme
+import { useTheme } from '../context/ThemeContext';
 import { db } from '../services/firebase';
 import { collection, query, where, onSnapshot, addDoc, deleteDoc, doc, updateDoc, writeBatch } from 'firebase/firestore';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, verifyBeforeUpdateEmail, deleteUser } from 'firebase/auth';
@@ -8,16 +8,14 @@ import { Tab } from '@headlessui/react';
 import Input from '../components/ui/Input';
 import Modal from '../components/ui/Modal';
 
-// Fungsi helper untuk classNames
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function SettingsPage() {
   const { currentUser } = useAuth();
-  const { theme, toggleTheme } = useTheme(); // Panggil hook tema
+  const { theme, toggleTheme } = useTheme();
 
-  // Deklarasi semua state
   const [budgets, setBudgets] = useState({});
   const [budgetInputs, setBudgetInputs] = useState({});
   const [categories, setCategories] = useState({ expense: [], income: [] });
@@ -34,7 +32,6 @@ export default function SettingsPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Efek untuk mengambil data Kategori dan Anggaran
   useEffect(() => {
     if (!currentUser) return;
     const catQuery = query(collection(db, 'categories'), where('userId', '==', currentUser.uid));

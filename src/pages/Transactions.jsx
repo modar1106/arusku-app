@@ -10,11 +10,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 export default function TransactionsPage() {
   const { currentUser } = useAuth();
   
-  // State untuk data dari Firestore
   const [transactions, setTransactions] = useState([]);
   const [userCategories, setUserCategories] = useState({ expense: ['Semua'], income: ['Semua'] });
 
-  // State untuk semua filter
   const [filterMode, setFilterMode] = useState('month');
   const [monthOffset, setMonthOffset] = useState(0);
   const [filterType, setFilterType] = useState('all');
@@ -22,16 +20,13 @@ export default function TransactionsPage() {
   const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
   const [endDate, setEndDate] = useState(new Date());
   
-  // State untuk Search & Paginasi
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // State untuk UI
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState({ income: 0, expense: 0, net: 0, count: 0 });
 
-  // State untuk modal edit
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(null);
   const [editTitle, setEditTitle] = useState('');
@@ -39,7 +34,6 @@ export default function TransactionsPage() {
   const [editType, setEditType] = useState('expense');
   const [editCategory, setEditCategory] = useState('');
 
-  // Efek untuk mengambil kategori kustom
   useEffect(() => {
     if (currentUser) {
       const q = query(collection(db, 'categories'), where('userId', '==', currentUser.uid));
@@ -54,7 +48,6 @@ export default function TransactionsPage() {
     }
   }, [currentUser]);
 
-  // Efek UTAMA untuk mengambil transaksi berdasarkan SEMUA filter
   useEffect(() => {
     if (!currentUser) return;
 
@@ -65,7 +58,7 @@ export default function TransactionsPage() {
     if (filterMode === 'custom') {
       if (!startDate || !endDate) {
         setLoading(false);
-        setTransactions([]); // Kosongkan transaksi jika tanggal tidak lengkap
+        setTransactions([]);
         return; 
       }
       queryStartDate = startDate;
@@ -77,7 +70,7 @@ export default function TransactionsPage() {
       queryStartDate = new Date();
       queryStartDate.setDate(now.getDate() - 7);
       queryEndDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-    } else { // filterMode === 'month'
+    } else {
       const targetDate = new Date();
       targetDate.setMonth(now.getMonth() + monthOffset);
       queryStartDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1);
@@ -122,7 +115,6 @@ export default function TransactionsPage() {
     return () => unsubscribe();
   }, [currentUser, filterType, filterCategory, filterMode, monthOffset, startDate, endDate]);
 
-  // Logika untuk Search
   const searchedTransactions = useMemo(() => {
     if (!searchTerm) return transactions;
     return transactions.filter(trans =>
@@ -130,7 +122,6 @@ export default function TransactionsPage() {
     );
   }, [transactions, searchTerm]);
 
-  // Logika untuk Paginasi
   const totalPages = Math.ceil(searchedTransactions.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -139,7 +130,6 @@ export default function TransactionsPage() {
   const goToNextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
   const goToPreviousPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
-  // Efek untuk mengisi form edit
   useEffect(() => {
     if (currentlyEditing) {
       setEditTitle(currentlyEditing.title);

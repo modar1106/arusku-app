@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import Input from '../components/ui/Input';
-import AuthLayout from '../components/auth/AuthLayout'; // <-- 1. Import layout
+import AuthLayout from '../components/auth/AuthLayout';
 import { Link } from 'react-router-dom';
 
 export default function RegisterPage() {

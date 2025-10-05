@@ -1,11 +1,9 @@
-// src/services/firebase.js
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// Mengambil konfigurasi dari environment variables
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -15,12 +13,9 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Inisialisasi layanan Firebase yang akan kita gunakan
-const auth = getAuth(app); // Untuk Otentikasi
-const db = getFirestore(app); // Untuk Database Firestore
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Export instance layanan agar bisa digunakan di bagian lain aplikasi
 export { auth, db };

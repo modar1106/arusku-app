@@ -6,7 +6,6 @@ import Input from '../components/ui/Input';
 import { Link } from 'react-router-dom';
 import DonutChart from '../components/dashboard/DonutChart';
 
-// Komponen Progress Bar dipindahkan ke luar untuk best practice
 const BudgetProgress = ({ category, spent, budget }) => {
   const percentage = budget > 0 ? (spent / budget) * 100 : 0;
   const isOverBudget = percentage > 100;
@@ -53,13 +52,11 @@ export default function DashboardPage() {
   
   const [loading, setLoading] = useState(true);
 
-  // Efek untuk mengambil SEMUA data yang dibutuhkan
   useEffect(() => {
     if (!currentUser) return;
 
     setLoading(true);
     
-    // Listener untuk Kategori
     const catQuery = query(collection(db, 'categories'), where('userId', '==', currentUser.uid));
     const unsubCategories = onSnapshot(catQuery, (snapshot) => {
       const categoriesData = { expense: [], income: [] };
@@ -67,13 +64,11 @@ export default function DashboardPage() {
       setUserCategories(categoriesData);
     });
 
-    // Listener untuk Anggaran
     const budgetQuery = query(collection(db, 'budgets'), where('userId', '==', currentUser.uid));
     const unsubBudgets = onSnapshot(budgetQuery, (snapshot) => {
       setBudgets(snapshot.docs.map(doc => doc.data()));
     });
 
-    // Listener untuk Transaksi
     const transQuery = query(collection(db, 'transactions'), where('userId', '==', currentUser.uid));
     const unsubTransactions = onSnapshot(transQuery, (snapshot) => {
       const transData = snapshot.docs.map(doc => doc.data());
@@ -88,13 +83,10 @@ export default function DashboardPage() {
     };
   }, [currentUser]);
 
-  // Efek untuk MENGOLAH data setiap kali ada perubahan
   useEffect(() => {
-    // Kalkulasi saldo
     const balance = transactions.reduce((acc, trans) => trans.type === 'income' ? acc + trans.amount : acc - trans.amount, 0);
     setTotalBalance(balance);
 
-    // Kalkulasi data untuk Donut Chart
     const dataByCategory = transactions.reduce((acc, trans) => {
       const category = trans.category || 'Lainnya';
       acc[category] = (acc[category] || 0) + trans.amount;
@@ -104,7 +96,6 @@ export default function DashboardPage() {
     setTotalTurnover(turnover);
     setChartData(Object.keys(dataByCategory).map(key => ({ name: key, value: dataByCategory[key] })));
 
-    // Kalkulasi pengeluaran bulanan untuk budget
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const spending = transactions
@@ -115,9 +106,8 @@ export default function DashboardPage() {
       }, {});
     setMonthlySpending(spending);
 
-  }, [transactions]); // Jalankan ulang hanya jika transaksi berubah
+  }, [transactions]);
 
-  // Efek untuk mengatur kategori default di form
   useEffect(() => {
     if (newType === 'expense' && userCategories.expense.length > 0) {
       setNewCategory(userCategories.expense[0]);
